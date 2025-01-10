@@ -1,33 +1,31 @@
-let faturamentoMensal = [
-  { dia: 1, faturamento: 200 },
-  { dia: 2, faturamento: 400 },
-  { dia: 3, faturamento: 0 },
-  { dia: 4, faturamento: 500 },
-  { dia: 5, faturamento: 300 },
-  { dia: 6, faturamento: 100 },
-  { dia: 7, faturamento: 0 },
-];
+const fs = require("fs");
 
-let totalFaturamento = 0;
-let diasComFaturamento = 0;
-let menorFaturamento = Infinity;
-let maiorFaturamento = -Infinity;
+// Carregar o arquivo JSON
+const faturamento = JSON.parse(fs.readFileSync("dados.json", "utf-8"));
 
-faturamentoMensal.forEach((dia) => {
-  if (dia.faturamento > 0) {
-    totalFaturamento += dia.faturamento;
-    diasComFaturamento++;
-    if (dia.faturamento < menorFaturamento) menorFaturamento = dia.faturamento;
-    if (dia.faturamento > maiorFaturamento) maiorFaturamento = dia.faturamento;
-  }
-});
+// Filtrar os dias com faturamento (excluindo os dias com 0.0)
+const diasComFaturamento = faturamento.filter((item) => item.valor > 0);
 
-let mediaFaturamento = totalFaturamento / diasComFaturamento;
+// Calcular a média de faturamento
+const totalFaturamento = diasComFaturamento.reduce(
+  (total, item) => total + item.valor,
+  0
+);
+const mediaFaturamento = totalFaturamento / diasComFaturamento.length;
 
-let diasAcimaDaMedia = faturamentoMensal.filter(
-  (dia) => dia.faturamento > mediaFaturamento
+// Calcular o menor e maior valor de faturamento
+const menorFaturamento = Math.min(
+  ...diasComFaturamento.map((item) => item.valor)
+);
+const maiorFaturamento = Math.max(
+  ...diasComFaturamento.map((item) => item.valor)
+);
+
+// Contar os dias com faturamento superior à média
+const diasAcimaDaMedia = diasComFaturamento.filter(
+  (item) => item.valor > mediaFaturamento
 ).length;
 
-console.log(`Menor Faturamento: R$${menorFaturamento}`);
-console.log(`Maior Faturamento: R$${maiorFaturamento}`);
-console.log(`Dias com faturamento acima da média: ${diasAcimaDaMedia}`);
+console.log(`Menor Faturamento: R$${menorFaturamento.toFixed(2)}`);
+console.log(`Maior Faturamento: R$${maiorFaturamento.toFixed(2)}`);
+console.log(`Dias com Faturamento Acima da Média: ${diasAcimaDaMedia}`);

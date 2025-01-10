@@ -1,17 +1,19 @@
-let faturamentoEstados = {
-  SP: 67836.43,
-  RJ: 36678.66,
-  MG: 29229.88,
-  ES: 27165.48,
-  Outros: 19849.53,
-};
+const faturamentoEstados = [
+  { estado: "SP", valor: 67836.43 },
+  { estado: "RJ", valor: 36678.66 },
+  { estado: "MG", valor: 29229.88 },
+  { estado: "ES", valor: 27165.48 },
+  { estado: "Outros", valor: 19849.53 },
+];
 
-let totalFaturamento = Object.values(faturamentoEstados).reduce(
-  (acc, valor) => acc + valor,
+// Calcular o total de faturamento
+const totalFaturamentoEstados = faturamentoEstados.reduce(
+  (total, item) => total + item.valor,
   0
 );
 
-for (let estado in faturamentoEstados) {
-  let percentual = (faturamentoEstados[estado] / totalFaturamento) * 100;
-  console.log(`${estado}: ${percentual.toFixed(2)}%`);
-}
+// Calcular o percentual de cada estado
+faturamentoEstados.forEach((item) => {
+  const percentual = (item.valor / totalFaturamentoEstados) * 100;
+  console.log(`${item.estado}: ${percentual.toFixed(2)}%`);
+});
